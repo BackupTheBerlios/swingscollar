@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="MacRoman"?>
+<jardesc>
+<jar path="/Volumes/assist/ozdevel/scollar/standalone/swingscollar.jar"/>
+<options buildIfNeeded="true" compress="true" descriptionLocation="/swingscollar/swingscollar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+<storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+<selectedProjects/>
+<manifest generateManifest="true" mainClassHandleIdentifier="=swingscollar/src&lt;eu.evoluware.swingscollar{ScollPanel.java[ScollPanel" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+<sealing sealJar="true">
+<packagesToSeal/>
+<packagesToUnSeal/>
+</sealing>
+</manifest>
+<selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+<folder path="/swingscollar/doc/index-files"/>
+<file path="/swingscollar/scolltest.xml"/>
+<file path="/swingscollar/swingscollar.jardesc"/>
+<folder path="/swingscollar/doc/eu"/>
+<file path="/swingscollar/doc/constant-values.html"/>
+<file path="/swingscollar/doc/help-doc.html"/>
+<javaElement handleIdentifier="=swingscollar/src"/>
+<file path="/swingscollar/doc/deprecated-list.html"/>
+<file path="/swingscollar/doc/serialized-form.html"/>
+<file path="/swingscollar/.project"/>
+<folder path="/swingscollar/doc/resources"/>
+<file path="/swingscollar/doc/overview-tree.html"/>
+<file path="/swingscollar/doc/allclasses-noframe.html"/>
+<file path="/swingscollar/doc/index.html"/>
+<file path="/swingscollar/.classpath"/>
+<file path="/swingscollar/doc/allclasses-frame.html"/>
+<file path="/swingscollar/doc/stylesheet.css"/>
+<file path="/swingscollar/doc/package-list"/>
+</selectedElements>
+</jardesc>
