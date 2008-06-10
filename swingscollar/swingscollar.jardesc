@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="MacRoman"?>
 <jardesc>
-<jar path="/Volumes/assist/ozdevel/scollar/standalone/swingscollar.jar"/>
+<jar path="swingscollar/swingscollar.jar"/>
 <options buildIfNeeded="true" compress="true" descriptionLocation="/swingscollar/swingscollar.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
 <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
 <selectedProjects/>
@@ -12,7 +12,6 @@
 </manifest>
 <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
 <folder path="/swingscollar/doc/index-files"/>
-<file path="/swingscollar/scolltest.xml"/>
 <file path="/swingscollar/swingscollar.jardesc"/>
 <folder path="/swingscollar/doc/eu"/>
 <file path="/swingscollar/doc/constant-values.html"/>
