@@ -29,8 +29,8 @@ public class ScollContextToken extends ScollToken {
 		int myState = this.getState();
 		int myID = this.getID();
 		switch (myID) {	
-		case ScollToken.RESERVED_WORD_PERMISSION:
-			if (myState == ScollToken.PERMISSION_DECLARATIONS_STATE) lexer.clearPermDecl();
+		case ScollToken.RESERVED_WORD_STATE:
+			if (myState == ScollToken.STATE_DECLARATIONS_STATE) lexer.clearStateDecl();
 			break;
 		case ScollToken.RESERVED_WORD_BEHAVIOR:
 			if (myState == ScollToken.BEHAVIOR_DECLARATIONS_STATE) lexer.clearBehDecl();
@@ -44,8 +44,8 @@ public class ScollContextToken extends ScollToken {
 			// no break
 		case ScollToken.IDENTIFIER:
 			switch (myState) {
-			case ScollToken.PERMISSION_DECLARATIONS_STATE:
-				lexer.addPermDecl(this);
+			case ScollToken.STATE_DECLARATIONS_STATE:
+				lexer.addStateDecl(this);
 				break;
 			case ScollToken.BEHAVIOR_DECLARATIONS_STATE:
 				lexer.addBehDecl(this);

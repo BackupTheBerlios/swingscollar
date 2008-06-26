@@ -30,7 +30,7 @@ public class ScollPatternPanel extends ScollTabPanel {
 	
 //	private void setupDocument(){	
 //		final String[] initString = {
-//				"declare " + newline + "    permission:", //bold
+//				"declare " + newline + "     state:", //bold
 //				" access/2 " + newline, //regular
 //				"    behavior: ", //bold
 //				" may.send/3 may.accept/1 may.get/2 may.return/2 " + newline, //regular

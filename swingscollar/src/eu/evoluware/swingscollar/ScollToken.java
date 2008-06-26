@@ -29,7 +29,7 @@ public class ScollToken {
 	public static final int UNDEFINED_STATE = -1;
 	public static final int INITIAL_STATE = ScollLexer.YYINITIAL;
 	public static final int DECLARATIONS_STATE = ScollLexer.DECLARATIONS;
-	public static final int PERMISSION_DECLARATIONS_STATE = ScollLexer.PERMDECL;
+	public static final int STATE_DECLARATIONS_STATE = ScollLexer.STATEDECL;
 	public static final int BEHAVIOR_DECLARATIONS_STATE = ScollLexer.BEHDECL;
 	public static final int KNOWLEDGE_DECLARATIONS_STATE = ScollLexer.KDECL;
 	public static final int SYSTEM_STATE = ScollLexer.SYSTEM;
@@ -46,7 +46,7 @@ public class ScollToken {
 	public final static int RESERVED_WORD_DECLARE = 0x103;
 	public final static int RESERVED_WORD_GOAL = 0x104;
 	public final static int RESERVED_WORD_KNOWLEDGE = 0x105;
-	public final static int RESERVED_WORD_PERMISSION = 0x106;
+	public final static int RESERVED_WORD_STATE = 0x106;
 	public final static int RESERVED_WORD_SUBJECT = 0x107;
 	public final static int RESERVED_WORD_SYSTEM = 0x108; 
 
@@ -273,7 +273,7 @@ public class ScollToken {
 			return("reservedWord");
 		} else if (isIdentifier()){	
 			switch (getState()) {	
-			case PERMISSION_DECLARATIONS_STATE: return ("permissionDeclaration");
+			case STATE_DECLARATIONS_STATE: return ("stateDeclaration");
 			case BEHAVIOR_DECLARATIONS_STATE: return ("behaviorDeclaration");
 			case KNOWLEDGE_DECLARATIONS_STATE: return ("knowledgeDeclaration");
 			case SYSTEM_STATE:

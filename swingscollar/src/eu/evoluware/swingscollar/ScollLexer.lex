@@ -31,7 +31,7 @@
  * See COPYING.TXT for details.
  */
 
-package eu.evoluware.swingscoll;
+package eu.evoluware.swingscollar;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -60,14 +60,14 @@ import java.util.List;
 %{
     private int lastToken;
     private int nextState=YYINITIAL;
-    private List<String> permDecl = new ArrayList<String>(10);
+    private List<String> stateDecl = new ArrayList<String>(10);
     private List<String> behDecl = new ArrayList<String>(10);
     private List<String> kDecl = new ArrayList<String>(10);
     private List<String> behaviorTypeNames = new ArrayList<String>(10);
     
     
-    public void clearPermDecl(){
-		permDecl.clear();
+    public void clearStateDecl(){
+		stateDecl.clear();
 	}
 	public void clearBehDecl(){
 		behDecl.clear();
@@ -78,8 +78,8 @@ import java.util.List;
 	public void clearBehaviorTypeNames(){
 		behaviorTypeNames.clear();
 	}
-	public void addPermDecl(ScollContextToken tkn){
-		permDecl.add(tkn.getContents());
+	public void addStateDecl(ScollContextToken tkn){
+		stateDecl.add(tkn.getContents());
 	}
 	public void addBehDecl(ScollContextToken tkn){
 		behDecl.add(tkn.getContents());
@@ -93,7 +93,7 @@ import java.util.List;
 
 	public String getContextIdentifierDescription(ScollContextToken tkn) {
 		String contents = tkn.getContents();
-		if (permDecl.contains(contents)) return "permissionPredicate";
+		if (stateDecl.contains(contents)) return "statePredicate";
 		if (behDecl.contains(contents)) return "behaviorPredicate";
 		if (kDecl.contains(contents)) return "knowledgePredicate";
 		return "identifier";
@@ -186,7 +186,7 @@ import java.util.List;
 %column
 %full
 %state DECLARATIONS
-%state PERMDECL
+%state STATEDECL
 %state BEHDECL
 %state KDECL
 %state SYSTEM
@@ -291,9 +291,9 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 
 
 
-<DECLARATIONS> "permission" { 
-    nextState = PERMDECL;
-    lastToken = ScollToken.RESERVED_WORD_PERMISSION;
+<DECLARATIONS> "state" { 
+    nextState = STATEDECL;
+    lastToken = ScollToken.RESERVED_WORD_STATE;
     String text = yytext();
     ScollContextToken t = (new ScollContextToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState, this));
     yybegin(nextState);
@@ -332,21 +332,21 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 
 
 
-<PERMDECL> "/" { 
+<STATEDECL> "/" { 
     lastToken = ScollToken.OPERATOR_DIVIDE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
 
-<PERMDECL> ":" {
+<STATEDECL> ":" {
     lastToken = ScollToken.OPERATOR_COLON;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
 
-<PERMDECL> "behavior" { 
+<STATEDECL> "behavior" { 
     nextState = BEHDECL;
     lastToken = ScollToken.RESERVED_WORD_BEHAVIOR;
     String text = yytext();
@@ -355,14 +355,14 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
     return (t);
 }
 
-<PERMDECL> {InitLowIdentifier} { 
+<STATEDECL> {InitLowIdentifier} { 
     lastToken = ScollToken.IDENTIFIER;
     String text = yytext();
     ScollContextToken t = (new ScollContextToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState, this));
     return (t);
 }
 
-<PERMDECL> {DecimalNum} {
+<STATEDECL> {DecimalNum} {
     /* At this point, the number we found could still be too large.
      * If it is too large, we need to return an error.
      * Scoll has methods built in that will decode from a string
@@ -379,34 +379,34 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
     return (t);
 }
 
-<PERMDECL> ({WhiteSpace}+) { 
+<STATEDECL> ({WhiteSpace}+) { 
     lastToken = ScollToken.WHITE_SPACE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
 
-<PERMDECL> {Comment} { 
+<STATEDECL> {Comment} { 
     lastToken = ScollToken.COMMENT_END_OF_LINE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
 
-<PERMDECL> {TradComment} {
+<STATEDECL> {TradComment} {
     lastToken = ScollToken.COMMENT_TRADITIONAL;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
 
-<PERMDECL> {ErrorInDeclarationsIdentifier} { 
+<STATEDECL> {ErrorInDeclarationsIdentifier} { 
     lastToken = ScollToken.ERROR_IDENTIFIER;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<PERMDECL> {OpenComment} { 
+<STATEDECL> {OpenComment} { 
     lastToken = ScollToken.ERROR_UNCLOSED_COMMENT;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));

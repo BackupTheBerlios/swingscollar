@@ -6,7 +6,6 @@
 
 package eu.evoluware.swingscollar;
 
-
 	/*
 	 * This file is part of the programmer editor demo
 	 * Copyright (C) 2005 Stephen Ostermiller
@@ -62,10 +61,10 @@ import javax.swing.text.StyleConstants;
 			addStyle("error", Color.WHITE, Color.RED, false, false);
 			addStyle("unknown", Color.WHITE, Color.ORANGE, false, false);
 			addStyle("grayedOut", Color.WHITE, Color.GRAY, false, false);
-			addStyle("permissionDeclaration", Color.WHITE, maroon, false, false);
+			addStyle("stateDeclaration", Color.WHITE, maroon, false, false);
 			addStyle("behaviorDeclaration", Color.WHITE, darkGreen, false, false);
 			addStyle("knowledgeDeclaration", Color.WHITE, darkBlue, false, false);
-			addStyle("permissionPredicate", Color.WHITE, maroon, false, false);
+			addStyle("statePredicate", Color.WHITE, maroon, false, false);
 			addStyle("behaviorPredicate", Color.WHITE, darkGreen, false, false);
 			addStyle("knowledgePredicate", Color.WHITE, darkBlue, false, false);
 			
@@ -87,8 +86,6 @@ import javax.swing.text.StyleConstants;
 			styles.put(name, style);
 		}
 		
-		
-
 		/**
 		 * Retrieve the style for the given type of token.
 		 * 
