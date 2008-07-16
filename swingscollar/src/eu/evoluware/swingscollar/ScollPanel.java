@@ -98,6 +98,8 @@ public class ScollPanel extends JPanel {
 		//Display the window.
 		frame.pack();
 		frame.setVisible(true);
+		
+		sp.patternPanel.scollBtns.startReadingControlMsgs();
 	}
 
 	public void setFrame(JFrame frame){

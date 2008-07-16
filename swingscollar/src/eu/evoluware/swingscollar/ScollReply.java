@@ -30,6 +30,9 @@ public class ScollReply {
 		if (line.equals("<reply>")) {
 			hasError = false;
 			validStart = true;
+		} else if (line.equals("<control>")) {
+			hasError = false;
+			validStart = true;
 		} else if (line.equals("<error>")) {
 			hasError = true;
 			validStart = true;
@@ -44,7 +47,7 @@ public class ScollReply {
 		return completed;
 	}
 
-	public void addLine(String line) { // return false when reply complete
+	public void addLine(String line) {
 		if (validStart) {
 			if ((hasError) && (line.equals("</error>"))) {
 				completed = true;
@@ -70,7 +73,7 @@ public class ScollReply {
 
 
 //	public void render(ScollTabPanel tabPanel, boolean inText){
-//		render(tabPanel, inText, false);
+//	render(tabPanel, inText, false);
 //	}
 
 	public void render(ScollTabPanel tabPanel, boolean inText, boolean addButtons){

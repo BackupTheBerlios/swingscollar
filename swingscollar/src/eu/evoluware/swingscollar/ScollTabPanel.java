@@ -64,7 +64,6 @@ import javax.swing.text.*;
 
 		//create pattern document
 		doc = new ScollDocument();
-		
 		//scollListener = new ScollListener(textPane, statusLabel);
 	}
 	
@@ -74,6 +73,10 @@ import javax.swing.text.*;
 
 	public ScollClient getScollClient(){
 		return mainPanel.scollClient;
+	}
+	
+	public ScollToolBar getToolBar(){
+		return scollBtns;
 	}
 
 }

@@ -69,10 +69,40 @@ public class ScollClient {
 		    }
 		}
 		catch (Exception e){
-			reply = getBadReply("bad communication mainIn ScollReply.replyto()");	
+			reply = getBadReply("bad communication mainIn ScollReply.replyTo()");	
 		}
 		return reply;
 	}
 	
-
+	
+	public ScollReply controlReplyTo(String code){
+		String replyCode = "Java exception in sendControl()";
+		ScollReply reply;
+		try{ 
+			controlOut.flush();
+			controlOut.print(code);
+			controlOut.flush();
+			replyCode = "INTERRUPT WAS SENT";
+			reply = new ScollReply("<control>");
+			reply.addLine(replyCode);
+		}
+		catch (Exception e){
+			reply = getBadReply("bad communication mainIn ScollReply.controlReplyTo()");	
+		}
+		return reply;
+	}
+	
+	public String readNextControlMsg(){
+		String msg = "Java exception in readNextControlMsg()";
+		try{ 
+			msg = controlIn.readLine();
+		}
+		catch (Exception e){
+			;	
+		}
+		return msg;
+	}
+	
+	
 }
+

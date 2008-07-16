@@ -65,7 +65,7 @@ public class ScollProgressUtil{
 
     } 
  
-    public static ScollProgressMonitor createScolllProgressMonitor(Component owner, int total, boolean indeterminate, int milliSecondsToWait){ 
+    public static ScollProgressMonitor createScollProgressMonitor(Component owner, int total, boolean indeterminate, int milliSecondsToWait){ 
         ScollProgressMonitor monitor = new ScollProgressMonitor(total, indeterminate, milliSecondsToWait); 
         Window window = owner instanceof Window 
                 ? (Window)owner 

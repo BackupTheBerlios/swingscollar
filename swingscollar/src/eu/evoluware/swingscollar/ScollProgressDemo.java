@@ -15,7 +15,7 @@ public class ScollProgressDemo{
     static JFrame frame; 
     static Runnable heavyRunnable = new Runnable(){ 
         public void run(){ 
-            ScollProgressMonitor monitor = ScollProgressUtil.createScolllProgressMonitor(frame, 100, false, 1000); 
+            ScollProgressMonitor monitor = ScollProgressUtil.createScollProgressMonitor(frame, 100, false, 1000); 
             monitor.start("Fetching 1 of 10 records from database..."); 
             try{ 
                 for(int i=0; i<10; i+=1){ 

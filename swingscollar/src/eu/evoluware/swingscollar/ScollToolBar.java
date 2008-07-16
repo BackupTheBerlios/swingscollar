@@ -13,34 +13,9 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 
 	private  JButton[]  btns;
 	private final ScollTabPanel tabPanel;
-	private  Runnable heavyRunnable;
 
 	public ScollToolBar(final ScollTabPanel scollTabPanel) {
 		tabPanel = scollTabPanel;
-		heavyRunnable = new Runnable(){ 
-			public void run(){ 
-				ScollProgressMonitor monitor = ScollProgressUtil.createScolllProgressMonitor(tabPanel.mainPanel.frame, 100, false, 1000); 
-				monitor.start("Fetching 1 of 10 records from database..."); 
-				try{ 
-					for(int i=0; i<10; i+=1){ 
-						fetchRecord(i); 
-						monitor.setCurrent("Fetching "+(i+1)+" of 10 records from database", (i+1)*10); 
-					} 
-				} finally{ 
-					// to ensure that progress dlg is closed in case of any exception 
-					if(monitor.getCurrent()!=monitor.getTotal()) 
-						monitor.setCurrent(null, monitor.getTotal()); 
-				} 
-			} 
-
-			private void fetchRecord(int index){ 
-				try{ 
-					Thread.sleep(1000); 
-				} catch(InterruptedException e){ 
-					e.printStackTrace(); 
-				} 
-			} 
-		}; 
 	} 
 
 	public void setBtns(String[] BtnSelection){
@@ -51,7 +26,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 				,"fixpoints", "fixpts", "find fixpoints"
 				,"1 solution", "sol1", "find one solution"
 				,"solution", "sols", "find all solutions"
-//				,"test", "test", "do test"
+				,"interrupt", "interrupt", "interrrupt ongoing calculation"
 //				,"add panel", "addPanel", "add a panel"
 //				,"reset", "reset", "remove details"
 		};
@@ -76,9 +51,10 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 		final String a = action.getActionCommand();
 
 		if (a == "check") { doCheckSyntax();}
-		else if (a == "test") { doTest();}
+//		else if (a == "test") { doTest();}
 //		else if (a == "addPanel") {doAddPanel();}
 //		else if (a == "reset") {doReset();}
+		else if  (a == "interrupt") {doInterrupt();}
 		else if (doTestSyntax()){
 			if	(a == "fixpts") { doFixpts();}
 			else if (a == "sol1") { doSolveOne();}
@@ -105,55 +81,51 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 			return false;
 		}		
 	}
-
+	
 	public void doFixpts(){
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
 		String input="fixpts\n"+ tabPanel.textPane.getText();
-		ScollWorker worker = new ScollWorker(ScollWorker.FIXPTS, tabPanel, input, tabPanel.getScollClient());
-		worker.execute();
+		ScollWorker scollWorker = new ScollWorker(ScollWorker.FIXPTS, tabPanel, input, tabPanel.getScollClient());
+		scollWorker.execute();
 		//new JF
 	}	
 
 	public void doSolveOne(){
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
-		String input="sol1 1 120\n"+ tabPanel.textPane.getText();
-		ScollWorker worker = new ScollWorker(ScollWorker.SOLVEONE, tabPanel, input, tabPanel.getScollClient());
-		worker.execute();
+		String input="sol1 0\n"+ tabPanel.textPane.getText();
+		ScollWorker scollWorker  = new ScollWorker(ScollWorker.SOLVEONE, tabPanel, input, tabPanel.getScollClient());
+		scollWorker.execute();
 	}
 
 	public void doSolveAll(){
 //		showProgressDialog();
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
-		String input="sols 1 120\n"+ tabPanel.textPane.getText();
-		ScollWorker worker = new ScollWorker(ScollWorker.SOLVEALL, tabPanel, input, tabPanel.getScollClient());
-		worker.execute();
+		String input="sols 0\n"+ tabPanel.textPane.getText();
+		ScollWorker scollWorker = new ScollWorker(ScollWorker.SOLVEALL, tabPanel, input, tabPanel.getScollClient());
+		scollWorker.execute();
 	}	
 
-
+	public void doInterrupt(){
+		String input="interrupt\n"+ tabPanel.textPane.getText();
+		ScollWorker scollWorker = new ScollWorker(ScollWorker.INTERRUPT, tabPanel, input, tabPanel.getScollClient());
+		scollWorker.execute();
+	}	
+	
+	public void startReadingControlMsgs(){
+		ScollControllReporter reporter = new ScollControllReporter(tabPanel.getScollClient(), tabPanel);
+		reporter.execute();
+	}	
+	
 	public void doNothing(){
 		tabPanel.statusLabel.setText("nothing to do");
 	}
 
-	public void doTest(){
-		new Thread(heavyRunnable).start(); 
+//	public void doTest(){
+//		new Thread(heavyRunnable).start(); 
 //		ScollProgressDialog dialog = new ScollProgressDialog(this.tabPanel.mainPanel.frame);
 //		dialog.setVisible(true);
-
-	}
-
-//	private static void showProgressDialog() {
-//	//Create and set up the window.
-//	JFrame frame = new JFrame("Calculation In Progress");
-//	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-//	//Create and set up the content pane.
-//	JComponent newContentPane 	= new ScollProgressDialog(frame);
-//	newContentPane.setOpaque(true); //content panes must be opaque
-//	frame.setContentPane(newContentPane);
-
-//	//Display the window.
-//	frame.pack();
-//	frame.setVisible(true);
+//
 //	}
+
 
 }
