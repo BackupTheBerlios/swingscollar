@@ -30,9 +30,6 @@ public class ScollReply {
 		if (line.equals("<reply>")) {
 			hasError = false;
 			validStart = true;
-		} else if (line.equals("<control>")) {
-			hasError = false;
-			validStart = true;
 		} else if (line.equals("<error>")) {
 			hasError = true;
 			validStart = true;

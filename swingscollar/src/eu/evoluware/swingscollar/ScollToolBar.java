@@ -26,7 +26,6 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 				,"fixpoints", "fixpts", "find fixpoints"
 				,"1 solution", "sol1", "find one solution"
 				,"solution", "sols", "find all solutions"
-				,"interrupt", "interrupt", "interrrupt ongoing calculation"
 //				,"add panel", "addPanel", "add a panel"
 //				,"reset", "reset", "remove details"
 		};
@@ -54,7 +53,6 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 //		else if (a == "test") { doTest();}
 //		else if (a == "addPanel") {doAddPanel();}
 //		else if (a == "reset") {doReset();}
-		else if  (a == "interrupt") {doInterrupt();}
 		else if (doTestSyntax()){
 			if	(a == "fixpts") { doFixpts();}
 			else if (a == "sol1") { doSolveOne();}
@@ -103,17 +101,6 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 		String input="sols 0\n"+ tabPanel.textPane.getText();
 		ScollWorker scollWorker = new ScollWorker(ScollWorker.SOLVEALL, tabPanel, input, tabPanel.getScollClient());
 		scollWorker.execute();
-	}	
-
-	public void doInterrupt(){
-		String input="interrupt\n"+ tabPanel.textPane.getText();
-		ScollWorker scollWorker = new ScollWorker(ScollWorker.INTERRUPT, tabPanel, input, tabPanel.getScollClient());
-		scollWorker.execute();
-	}	
-	
-	public void startReadingControlMsgs(){
-		ScollControllReporter reporter = new ScollControllReporter(tabPanel.getScollClient(), tabPanel);
-		reporter.execute();
 	}	
 	
 	public void doNothing(){

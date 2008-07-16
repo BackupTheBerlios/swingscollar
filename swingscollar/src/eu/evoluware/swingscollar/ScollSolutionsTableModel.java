@@ -71,47 +71,7 @@ public class ScollSolutionsTableModel extends ScollTableModel {
 						}
 					}
 				}) ;
-				// int status = getSortingStatus(column);
-				// if (!e.isControlDown()) {
-				// cancelSorting();
-				// }
-				// // Cycle the sorting states through {NOT_SORTED, ASCENDING,
-				// // DESCENDING} or
-				// // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether
-				// // shift is
-				// // pressed.
-				// status = status + (e.isShiftDown() ? -1 : 1);
-				// status = (status + 4) % 3 - 1; // signed mod, returning {-1,
-				// 0,
-				// // 1}
-				// setSortingStatus(column, status);
 			}
 		}
 	}
-
-	// private class ClickableHeaderRenderer implements TableCellRenderer {
-	// private TableCellRenderer tableCellRenderer;
-	//
-	// public ClickableHeaderRenderer(TableCellRenderer tableCellRenderer) {
-	// this.tableCellRenderer = tableCellRenderer;
-	// }
-	//
-	// public Component getTableCellRendererComponent(JTable table,
-	// Object value,
-	// boolean isSelected,
-	// boolean hasFocus,
-	// int row,
-	// int column) {
-	// Component c = tableCellRenderer.getTableCellRendererComponent(table,
-	// value, isSelected, hasFocus, row, column);
-	// if (c instanceof JLabel) {
-	// JLabel l = (JLabel) c;
-	// l.setHorizontalTextPosition(JLabel.LEFT);
-	// int modelColumn = table.convertColumnIndexToModel(column);
-	// l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
-	// }
-	// return c;
-	// }
-	// }
-
 }

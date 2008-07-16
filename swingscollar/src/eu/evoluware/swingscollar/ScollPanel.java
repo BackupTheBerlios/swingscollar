@@ -24,7 +24,7 @@ public class ScollPanel extends JPanel {
 	//protected final JMenuBar menubar;
 
 	public ScollPanel(String[] args) {
-		scollClient = new ScollClient(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+		scollClient = new ScollClient(Integer.parseInt(args[0]));
 		tabbedPane = new ScollTabbedPane(this);
 		patternPanel = new ScollPatternPanel(this);
 		fixptPanel = new ScollFixptPanel(this);
@@ -63,26 +63,7 @@ public class ScollPanel extends JPanel {
 		//testInstallations(frame);
 		ScollPanel.createAndShowScollarGui(frame, args);
 	}	
-	
-//	private static void testInstallations(final JFrame frame){
-////		JPanel jp = new JPanel(new BorderLayout());
-////		
-////		frame.add(jp);
-////
-////		//Display the window.
-////		frame.pack();
-////		frame.setVisible(true);
-////		
-////		try {
-////		     Thread.sleep(2000);
-////		     //1000 millisecs
-////		}
-////		catch(InterruptedException ex) {
-////		}
-////		// now remove everything from this frame, to reuse it.	
-////		frame.remove(jp);
-//	}
-			
+		
 	private static void createAndShowScollarGui(final JFrame frame, final String[] args){
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -98,8 +79,6 @@ public class ScollPanel extends JPanel {
 		//Display the window.
 		frame.pack();
 		frame.setVisible(true);
-		
-		sp.patternPanel.scollBtns.startReadingControlMsgs();
 	}
 
 	public void setFrame(JFrame frame){

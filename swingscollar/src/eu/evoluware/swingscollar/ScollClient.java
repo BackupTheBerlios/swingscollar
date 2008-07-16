@@ -4,16 +4,13 @@ import java.io.*;
 import java.net.*;
 
 public class ScollClient {
-	private int serverPort, controlPort;
-	private Socket mainSocket, controlSocket;
-	@SuppressWarnings("unused")
-	private PrintWriter mainOut,  controlOut;
-	@SuppressWarnings("unused")
-	private BufferedReader mainIn,  controlIn;
+	private int serverPort;
+	private Socket mainSocket;
+	private PrintWriter mainOut;
+	private BufferedReader mainIn;
 	
-	public ScollClient(int sp, int cp) {
+	public ScollClient(int sp) {
 		serverPort = sp;
-		controlPort = cp;
 		try {
             mainSocket = new Socket("localhost", serverPort);
 //          mainSocket.setSendBufferSize(4096);
@@ -23,9 +20,6 @@ public class ScollClient {
 //            }
             mainOut = new PrintWriter(mainSocket.getOutputStream(), false); // no autoflush after every newline!
             mainIn = new BufferedReader(new InputStreamReader(mainSocket.getInputStream()));
-            controlSocket = new Socket("localhost", controlPort);
-           controlOut = new PrintWriter(controlSocket.getOutputStream(), false);
-            controlIn = new BufferedReader(new InputStreamReader(controlSocket.getInputStream()));
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: localhost.");
             //System.exit(1);
@@ -72,35 +66,6 @@ public class ScollClient {
 			reply = getBadReply("bad communication mainIn ScollReply.replyTo()");	
 		}
 		return reply;
-	}
-	
-	
-	public ScollReply controlReplyTo(String code){
-		String replyCode = "Java exception in sendControl()";
-		ScollReply reply;
-		try{ 
-			controlOut.flush();
-			controlOut.print(code);
-			controlOut.flush();
-			replyCode = "INTERRUPT WAS SENT";
-			reply = new ScollReply("<control>");
-			reply.addLine(replyCode);
-		}
-		catch (Exception e){
-			reply = getBadReply("bad communication mainIn ScollReply.controlReplyTo()");	
-		}
-		return reply;
-	}
-	
-	public String readNextControlMsg(){
-		String msg = "Java exception in readNextControlMsg()";
-		try{ 
-			msg = controlIn.readLine();
-		}
-		catch (Exception e){
-			;	
-		}
-		return msg;
 	}
 	
 	
