@@ -90,7 +90,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 
 	public void doSolveOne(){
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
-		String input="sol1 0\n"+ tabPanel.textPane.getText();
+		String input="sol1 0\n"+ tabPanel.textPane.getText(); // timeout = 0
 		ScollWorker scollWorker  = new ScollWorker(ScollWorker.SOLVEONE, tabPanel, input, tabPanel.getScollClient());
 		scollWorker.execute();
 	}
@@ -98,7 +98,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 	public void doSolveAll(){
 //		showProgressDialog();
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
-		String input="sols 0\n"+ tabPanel.textPane.getText();
+		String input="sols 0\n"+ tabPanel.textPane.getText(); // timeout = 0
 		ScollWorker scollWorker = new ScollWorker(ScollWorker.SOLVEALL, tabPanel, input, tabPanel.getScollClient());
 		scollWorker.execute();
 	}	
