@@ -60,7 +60,7 @@ public class ScollPanel extends JPanel {
 	private static void createAndShowGUI(final String[] args) {
 		final JFrame frame = new JFrame("Scollar");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//testInstallations(frame);
+		//testInstallations(frame);	
 		ScollPanel.createAndShowScollarGui(frame, args);
 	}	
 		
@@ -121,6 +121,10 @@ public class ScollPanel extends JPanel {
 	}
 
 	public static void main(final String[] args) {
+		//Set up communication with Scoll process 
+		// communication pattern:
+		// send request [read status update]* [send interrupt] read response 
+		
 		//Schedule a job for the event dispatching thread:
 		//creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
