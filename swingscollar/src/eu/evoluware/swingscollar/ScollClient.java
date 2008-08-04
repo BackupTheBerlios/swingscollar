@@ -2,14 +2,16 @@ package eu.evoluware.swingscollar;
 
 import java.io.*;
 import java.net.*;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+//import javax.swing.SwingUtilities;
 
 public class ScollClient {
-	private volatile int serverPort;
+	private final int serverPort;
 	private volatile Socket mainSocket;
 	private volatile PrintWriter mainOut;
 	private volatile BufferedReader mainIn;
-	private volatile BlockingQueue<Runnable> replyQ;
+	private volatile LinkedBlockingQueue<ScollReply> replyQ;
 
 	public ScollClient(int sp) {
 		serverPort = sp;
@@ -32,49 +34,49 @@ public class ScollClient {
 		}
 	}
 
-	public void setReplyQ(BlockingQueue<Runnable> Q){
+	public synchronized void setReplyQ(LinkedBlockingQueue<ScollReply> Q){
 		replyQ = Q;
 	}
 
-	public BufferedReader getInReader(){
-		return mainIn;	
-	}	
+//	public BufferedReader getInReader(){
+//	return mainIn;	
+//	}	
 
-	public ScollReply getBadReply(String msg){
-		ScollReply reply = new ScollReply("<error>");
+	private synchronized ScollReply getBadReply(String msg){
+		final ScollReply reply = new ScollReply("<error>");
 		reply.addLine(msg);
 		reply.addLine("</error>");
 		return reply;
 	}
 
-	public ScollReply replyTo(String request){
-		String replyType = null;
-		ScollReply reply;
-		String tmp;
-		try {
-			mainOut.flush();
-			mainOut.print(request);//mainOut.write(request);
-			mainOut.flush();
-			replyType = mainIn.readLine();
-			reply = new ScollReply(replyType);
-			while (! reply.isComplete()){
-				tmp = mainIn.readLine();
-				if (tmp == null) {
-					reply.endPrematurely();
-					break;
-				}
-				else {
-					reply.addLine(tmp);
-				}
-			}
-		}
-		catch (Exception e){
-			reply = getBadReply("bad communication mainIn ScollReply.replyTo()");	
-		}
-		return reply;
-	}
+//	public ScollReply replyTo(String request){
+//	String replyType = null;
+//	ScollReply reply;
+//	String tmp;
+//	try {
+//	mainOut.flush();
+//	mainOut.print(request);//mainOut.write(request);
+//	mainOut.flush();
+//	replyType = mainIn.readLine();
+//	reply = new ScollReply(replyType);
+//	while (! reply.isComplete()){
+//	tmp = mainIn.readLine();
+//	if (tmp == null) {
+//	reply.endPrematurely();
+//	break;
+//	}
+//	else {
+//	reply.addLine(tmp);
+//	}
+//	}
+//	}
+//	catch (Exception e){
+//	reply = getBadReply("bad communication mainIn ScollReply.replyTo()");	
+//	}
+//	return reply;
+//	}
 
-	public void nextCmd(String request){
+	public synchronized void nextCmd(String request){
 		try {
 			mainOut.flush();
 			mainOut.print(request);//mainOut.write(request);
@@ -85,10 +87,10 @@ public class ScollClient {
 		}
 	}
 
-	private ScollReply getNextReply(){
+	public synchronized ScollReply getNextReply(){
 		String replyType = null;
 		ScollReply reply;
-		String tmp;
+		String tmp = null;
 		try {
 			replyType = mainIn.readLine();
 			reply = new ScollReply(replyType);
@@ -104,17 +106,15 @@ public class ScollClient {
 			}
 		}
 		catch (Exception e){
-			reply = getBadReply("bad communication mainIn ScollReply.replyTo()");	
+			reply = getBadReply("bad communication mainIn ScollReply.getNextReply()");	
 		}
 		return reply;
 	}	
 
-	public void nextReply() throws InterruptedException{
-		final ScollReply R = getNextReply();	
-		replyQ.put(new Runnable(){	
-			public void run(){	
-				R.render(null, false, false);
-			}});
+	public synchronized void nextReply() throws InterruptedException{
+		replyQ.put(ScollReply.testReply("in client.nextreply()"));
+		final ScollReply R = getNextReply();
+		replyQ.put(R);
 	}
 
 

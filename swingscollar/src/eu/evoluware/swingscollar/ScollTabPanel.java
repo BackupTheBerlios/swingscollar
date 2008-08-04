@@ -70,10 +70,6 @@ import javax.swing.text.*;
 	public ScollPanel getMainPanel(){
 		return this.mainPanel;
 	}
-
-	public ScollClient getScollClient(){
-		return mainPanel.scollClient;
-	}
 	
 	public ScollToolBar getToolBar(){
 		return scollBtns;

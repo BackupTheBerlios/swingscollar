@@ -10,9 +10,8 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ScollPanel extends JPanel {
+	public static final int PATTERNINDEX=0, FIXPTINDEX=1, SOLUTIONINDEX = 2, DETAILINDEX=3;
 
-
-	protected final ScollClient scollClient;
 	protected final ScollTabbedPane tabbedPane;
 	protected final ScollPatternPanel patternPanel;
 	protected final ScollFixptPanel fixptPanel;
@@ -20,11 +19,10 @@ public class ScollPanel extends JPanel {
 	protected final SpringLayout springlayout;
 	protected String openedFilename;
 	protected boolean openFilename;
-	protected JFrame frame;
+	protected volatile JFrame frame;
 	//protected final JMenuBar menubar;
 
 	public ScollPanel(String[] args) {
-		scollClient = new ScollClient(Integer.parseInt(args[0]));
 		tabbedPane = new ScollTabbedPane(this);
 		patternPanel = new ScollPatternPanel(this);
 		fixptPanel = new ScollFixptPanel(this);
@@ -67,9 +65,11 @@ public class ScollPanel extends JPanel {
 	private static void createAndShowScollarGui(final JFrame frame, final String[] args){
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-
 		//Add content to the window.
 		ScollPanel sp = new ScollPanel(args);
+		
+		ScollPort.initialize(Integer.parseInt(args[0]), sp);
+		
 		sp.setFrame(frame);
 		frame.add(sp);
 
@@ -79,6 +79,8 @@ public class ScollPanel extends JPanel {
 		//Display the window.
 		frame.pack();
 		frame.setVisible(true);
+		
+		
 	}
 
 	public void setFrame(JFrame frame){
@@ -120,11 +122,7 @@ public class ScollPanel extends JPanel {
 		frame.setJMenuBar(menubar);
 	}
 
-	public static void main(final String[] args) {
-		//Set up communication with Scoll process 
-		// communication pattern:
-		// send request [read status update]* [send interrupt] read response 
-		
+	public static void main(final String[] args) {	
 		//Schedule a job for the event dispatching thread:
 		//creating and showing this application's GUI.
 		SwingUtilities.invokeLater(new Runnable() {
@@ -136,19 +134,19 @@ public class ScollPanel extends JPanel {
 		});
 	}
 
-	public ScollPatternPanel getPatternPanel(){
+	public synchronized ScollPatternPanel getPatternPanel(){
 		return patternPanel;
 	}
-	public ScollFixptPanel getFixptPanel(){
+	public synchronized ScollFixptPanel getFixptPanel(){
 		return fixptPanel;
 	}
-	public ScollSolutionsPanel getSolutionsPanel(){
+	public synchronized ScollSolutionsPanel getSolutionsPanel(){
 		return solutionsPanel;
 	}
-	public ScollSolutionsPanel getDetailPanel(int nr){
+	public synchronized ScollSolutionsPanel getDetailPanel(int nr){
 		return (ScollSolutionsPanel) getTabbedPane().getComponentAt(nr+2);
 	}
-	public ScollTabbedPane getTabbedPane(){
+	public synchronized ScollTabbedPane getTabbedPane(){
 		return tabbedPane;
 	}
 	public String getOpenedFilename(){

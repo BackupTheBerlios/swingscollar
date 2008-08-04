@@ -11,13 +11,22 @@ import javax.swing.JTable;
 import javax.swing.text.*;
 
 public class ScollReply {
-	protected LinkedList<String> result; // not including reply/error
+	public static final int CHECK=0, FIXPTS=1, SOL=2, SHOW=3, ERROR=4; 
+	public static synchronized ScollReply testReply(String S){
+		final ScollReply R = new ScollReply("<reply><check>");
+		R.addLine(S);
+		R.addLine("</reply>");
+		return R;
+	}
+	protected volatile LinkedList<String> result; // not including reply/error
 	// prefix/suffix
-	protected int lines; // not including reply/error prefix/suffix
-	protected Boolean hasError;
-	protected Boolean validStart;
-	protected Boolean completed;
-	protected Boolean endedPrematurely;
+	protected volatile int lines; // not including reply/error prefix/suffix
+	protected volatile Boolean hasError;
+	protected volatile Boolean validStart;
+	protected volatile Boolean completed;
+	protected volatile Boolean endedPrematurely;
+	protected volatile int type;
+	protected volatile int showNmbr = 0;
 
 	public ScollReply(String line) {
 		result = new LinkedList<String>();
@@ -27,24 +36,41 @@ public class ScollReply {
 		completed = false;
 		endedPrematurely = false;
 
-		if (line.equals("<reply>")) {
+		if (line.equals("<reply><check>")) {
 			hasError = false;
 			validStart = true;
+			type = CHECK;
+		} else if (line.equals("<reply><fixpts>")) {
+			hasError = false;
+			validStart = true;
+			type = FIXPTS;
+		} else if (line.equals("<reply><sol>")) {
+			hasError = false;
+			validStart = true;
+			type = SOL;
+		} else if (line.substring(0, Math.min("<reply><show ".length(), line.length())).equals("<reply><show ")) {
+			hasError = false;
+			validStart = true;
+			showNmbr = Integer.parseInt(line.substring("<reply><show ".length(), line.length()-1));
+			type = SHOW;
 		} else if (line.equals("<error>")) {
 			hasError = true;
 			validStart = true;
+			type = ERROR;
 		} else {
 			hasError = true;
 			validStart = false;
-
+			completed = true;
+			endedPrematurely = true;
+			type = ERROR;
 		}
 	}
 
-	public Boolean isComplete() {
+	public synchronized Boolean isComplete() {
 		return completed;
 	}
 
-	public void addLine(String line) {
+	public synchronized void addLine(String line) {
 		if (validStart) {
 			if ((hasError) && (line.equals("</error>"))) {
 				completed = true;
@@ -58,39 +84,66 @@ public class ScollReply {
 		}
 	}
 
-	public void endPrematurely() {
+	public synchronized void endPrematurely() {
 		endedPrematurely = true;
 		completed = true;
 		hasError = true;
+		type = ERROR;
 	}
 
-	public String getFirstLine(){
-		return (result.size() == 0) ? "" : result.getFirst();
-	}
-
-
-//	public void render(ScollTabPanel tabPanel, boolean inText){
-//	render(tabPanel, inText, false);
+//	private String getFirstLine(){
+//	return (result.size() == 0) ? "" : result.getFirst();
 //	}
 
-	public void render(ScollTabPanel tabPanel, boolean inText, boolean addButtons){
+	private synchronized ScollPanel getMainPanel(){
+		return ScollPort.getInstance().getPanel();
+	}
+
+	public synchronized void render(){
+		ScollPanel mainPanel = getMainPanel();
+		//mainPanel.getPatternPanel().statusLabel.setText("test");
+		switch (type) {
+		case CHECK:	
+			renderLabel(mainPanel.getPatternPanel());
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());
+			break;	
+		case FIXPTS:
+			render(mainPanel.getFixptPanel(), false);
+			mainPanel.getTabbedPane().setEnabledAt(ScollPanel.FIXPTINDEX, true);
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getFixptPanel());
+			break;
+		case SOL:
+			render(mainPanel.getSolutionsPanel(), true);
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getSolutionsPanel());
+			break;
+		case SHOW:
+			render(mainPanel.getDetailPanel(showNmbr), false);
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getDetailPanel(showNmbr));
+			break;		
+			//case ERROR:
+		case ERROR:
+			renderLabel(mainPanel.getPatternPanel());
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());
+			break;
+		default:;
+		}
+	}
+
+
+	private synchronized void render(ScollTabPanel tabPanel, boolean addButtons){
 		Iterator<String> it = result.iterator();
-		if (inText) 
-			try {
-				tabPanel.textPane.setText("");
-				renderText(it, tabPanel, addButtons);
-				tabPanel.textPane.setCaretPosition(0);
-			}	 
+		try {
+			tabPanel.textPane.setText("");
+			renderText(it, tabPanel, addButtons);
+			tabPanel.textPane.setCaretPosition(0);
+		}	 
 		catch (BadLocationException e) {
 			// TODO Auto-generated catch block
-			;
-		}
-		else 
-			renderLabel(it, tabPanel);
+			;}
 	}	
 
-
-	public void renderLabel(Iterator<String> it, ScollTabPanel tabPanel) {
+	private synchronized void renderLabel(ScollTabPanel tabPanel) {
+		Iterator<String> it = result.iterator();
 		String content = "";
 		String str = "";
 		while (it.hasNext()) {
@@ -100,12 +153,25 @@ public class ScollReply {
 		tabPanel.statusLabel.setText(content);				
 	}
 
-	public void renderText(Iterator<String> it, ScollTabPanel tabPanel)
-	throws BadLocationException{
-		this.renderText(it, tabPanel, false);
-	}
+//	public void renderText(ScollTabPanel tabPanel){
+//	Iterator<String> it = result.iterator();
+//	try {
+//	tabPanel.textPane.setText("");
+//	renderText(it, tabPanel, false);
+//	tabPanel.textPane.setCaretPosition(0);
+//	}	 
+//	catch (BadLocationException e) {
+//	// TODO Auto-generated catch block
+//	;
+//	}
+//	}	
 
-	public void renderText(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons)
+//	public void renderText(Iterator<String> it, ScollTabPanel tabPanel)
+//	throws BadLocationException{
+//	this.renderText(it, tabPanel, false);
+//	}
+
+	private synchronized void renderText(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons)
 	throws BadLocationException {
 		String str = "";
 		Document doc = tabPanel.textPane.getDocument();
@@ -131,11 +197,11 @@ public class ScollReply {
 		}
 	}
 
-	public void renderTable(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
-		this.renderTable(it, tabPanel, false);
-	}
+//	private void renderTable(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
+//	this.renderTable(it, tabPanel, false);
+//	}
 
-	public void renderTable(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons) throws BadLocationException {
+	private synchronized void renderTable(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons) throws BadLocationException {
 		String str;
 		String[] desc;
 		String subjectname = null;
@@ -182,7 +248,7 @@ public class ScollReply {
 		}
 	}
 
-	public void renderJpg(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
+	private synchronized void renderJpg(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
 		String filename = null;
 		Boolean error= false;
 		Document doc = tabPanel.textPane.getDocument();

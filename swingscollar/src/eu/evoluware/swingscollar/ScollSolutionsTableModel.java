@@ -58,13 +58,13 @@ public class ScollSolutionsTableModel extends ScollTableModel {
 				SwingUtilities.invokeLater(new Runnable() {
 					public void run() {
 						final ScollTabbedPane stp = tabPanel.getMainPanel().getTabbedPane();
-						//stp.addDetailsFor(column);
 						if (stp.getDetailsFor(column) == null){
 							stp.addDetailsFor(column);
-							ScollSolutionsPanel det = stp.getDetailsFor(column);
-							ScollReply reply = det.getScollClient().replyTo("show "+ column + "\n");
-							reply.render(det, true, false); // addButtons=false because detail should not contain buttons
-							stp.setSelectedIndex(2);
+							ScollPort.getInstance().sendCmd("show "+ column + "\n");
+							//ScollSolutionsPanel det = stp.getDetailsFor(column);
+							//ScollReply reply = det.getScollClient().replyTo("show "+ column + "\n");
+							//reply.render(det, true, false); // addButtons=false because detail should not contain buttons
+							//stp.setSelectedIndex(2);
 						}
 						else {
 							stp.setSelectedComponent(stp.getDetailsFor(column));
