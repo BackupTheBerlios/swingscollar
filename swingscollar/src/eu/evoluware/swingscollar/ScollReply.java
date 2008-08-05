@@ -11,7 +11,7 @@ import javax.swing.JTable;
 import javax.swing.text.*;
 
 public class ScollReply {
-	public static final int CHECK=0, FIXPTS=1, SOL=2, SHOW=3, ERROR=4; 
+	public static final int CHECK=0, FIXPTS=1, SOL=2, SHOW=3, STATUS=4, ERROR=5; 
 	public static synchronized ScollReply testReply(String S){
 		final ScollReply R = new ScollReply("<reply><check>");
 		R.addLine(S);
@@ -48,15 +48,19 @@ public class ScollReply {
 			hasError = false;
 			validStart = true;
 			type = SOL;
+		} else if (line.equals("<reply><status>")) {
+			hasError = false;
+			validStart = true;
+			type = STATUS;
+		} else if (line.equals("<error>")) {
+			hasError = true;
+			validStart = true;
+			type = ERROR;
 		} else if (line.substring(0, Math.min("<reply><show ".length(), line.length())).equals("<reply><show ")) {
 			hasError = false;
 			validStart = true;
 			showNmbr = Integer.parseInt(line.substring("<reply><show ".length(), line.length()-1));
 			type = SHOW;
-		} else if (line.equals("<error>")) {
-			hasError = true;
-			validStart = true;
-			type = ERROR;
 		} else {
 			hasError = true;
 			validStart = false;
@@ -120,7 +124,12 @@ public class ScollReply {
 			render(mainPanel.getDetailPanel(showNmbr), false);
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getDetailPanel(showNmbr));
 			break;		
-			//case ERROR:
+		case STATUS:
+			renderLabel(mainPanel.getPatternPanel());
+			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());
+			//ScollPort.getInstance().sendCmd("status\n");
+			ScollPort.getInstance().getNextReply(); //status is never a final answer
+			break;	
 		case ERROR:
 			renderLabel(mainPanel.getPatternPanel());
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());

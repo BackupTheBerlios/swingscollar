@@ -2,7 +2,7 @@ package eu.evoluware.swingscollar;
 
 import java.io.*;
 import java.net.*;
-import java.util.concurrent.LinkedBlockingQueue;
+//import java.util.concurrent.LinkedBlockingQueue;
 
 //import javax.swing.SwingUtilities;
 
@@ -11,7 +11,7 @@ public class ScollClient {
 	private volatile Socket mainSocket;
 	private volatile PrintWriter mainOut;
 	private volatile BufferedReader mainIn;
-	private volatile LinkedBlockingQueue<ScollReply> replyQ;
+//	private volatile LinkedBlockingQueue<ScollReply> replyQ;
 
 	public ScollClient(int sp) {
 		serverPort = sp;
@@ -34,9 +34,9 @@ public class ScollClient {
 		}
 	}
 
-	public synchronized void setReplyQ(LinkedBlockingQueue<ScollReply> Q){
-		replyQ = Q;
-	}
+//	public synchronized void setReplyQ(LinkedBlockingQueue<ScollReply> Q){
+//		replyQ = Q;
+//	}
 
 //	public BufferedReader getInReader(){
 //	return mainIn;	
@@ -111,11 +111,11 @@ public class ScollClient {
 		return reply;
 	}	
 
-	public synchronized void nextReply() throws InterruptedException{
-		replyQ.put(ScollReply.testReply("in client.nextreply()"));
-		final ScollReply R = getNextReply();
-		replyQ.put(R);
-	}
+//	public synchronized void nextReply() throws InterruptedException{
+//		replyQ.put(ScollReply.testReply("in client.nextreply()"));
+//		final ScollReply R = getNextReply();
+//		replyQ.put(R);
+//	}
 
 
 }
