@@ -68,7 +68,7 @@ public class ScollPanel extends JPanel {
 		//Add content to the window.
 		ScollPanel sp = new ScollPanel(args);
 		
-		ScollPort.initialize(Integer.parseInt(args[0]), sp);
+		ScollPort.initialize(Integer.parseInt(args[0]), Integer.parseInt(args[1]), sp);
 		
 		sp.setFrame(frame);
 		frame.add(sp);

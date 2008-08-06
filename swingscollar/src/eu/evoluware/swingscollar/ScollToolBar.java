@@ -26,6 +26,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 				,"fixpoints", "fixpts", "find fixpoints"
 				,"1 solution", "sol1", "find one solution"
 				,"solution", "sols", "find all solutions"
+				,"interrupt", "interrupt", "interrupt current calculation"
 //				,"add panel", "addPanel", "add a panel"
 //				,"reset", "reset", "remove details"
 		};
@@ -49,14 +50,11 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 	public synchronized void actionPerformed(final ActionEvent action) {
 		final String a = action.getActionCommand();
 		if (a == "check") { doCheckSyntax();}
-//		else if (a == "test") { doTest();}
-//		else if (a == "addPanel") {doAddPanel();}
-//		else if (a == "reset") {doReset();}
-		else // if (doTestSyntax()){
-			if	(a == "fixpts") { doFixpts();}
-			else if (a == "sol1") { doSolveOne();}
-			else if (a == "sols") { doSolveAll();}
-			else {;};
+		else if	(a == "fixpts") { doFixpts();}
+		else if (a == "sol1") { doSolveOne();}
+		else if (a == "sols") { doSolveAll();}
+		else if (a == "interrupt") { doInterrupt();}
+		else {;};
 			//}
 			//else {doNothing();}
 	}
@@ -100,7 +98,11 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 		ScollPort.getInstance().getNextReply();
 	}	
 
-	public void doNothing(){
+	public synchronized void doInterrupt(){
+		ScollPort.getInstance().interrupt();
+	}
+	
+	public synchronized void doNothing(){
 		tabPanel.statusLabel.setText("nothing to do");
 	}
 

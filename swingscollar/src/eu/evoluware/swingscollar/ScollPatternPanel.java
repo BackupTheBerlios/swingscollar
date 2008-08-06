@@ -21,9 +21,10 @@ public class ScollPatternPanel extends ScollTabPanel {
 				"fixpts", 
 				"sol1",
 				"sols",
+				"interrupt",
 				//"test",
 				//"addPanel",
-				"//reset"
+				//"reset"
 		};
 		this.scollBtns.setBtns(ButtonStrings);
 	}

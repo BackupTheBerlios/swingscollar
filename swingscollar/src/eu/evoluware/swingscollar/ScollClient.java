@@ -3,7 +3,6 @@ package eu.evoluware.swingscollar;
 import java.io.*;
 import java.net.*;
 //import java.util.concurrent.LinkedBlockingQueue;
-
 //import javax.swing.SwingUtilities;
 
 public class ScollClient {
@@ -87,6 +86,18 @@ public class ScollClient {
 		}
 	}
 
+	public synchronized void sendInterrupt(){
+		try {
+			mainOut.flush();
+			mainOut.print("interrupt\n");//mainOut.write(request);
+			mainOut.flush();
+			//ScollPort.getInstance().getNextReply(this);
+		}
+		catch (Exception e){
+			e.printStackTrace();	
+		}
+	}
+	
 	public synchronized ScollReply getNextReply(){
 		String replyType = null;
 		ScollReply reply;
