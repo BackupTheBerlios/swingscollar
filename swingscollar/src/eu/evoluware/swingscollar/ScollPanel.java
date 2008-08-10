@@ -20,6 +20,7 @@ public class ScollPanel extends JPanel {
 	protected String openedFilename;
 	protected boolean openFilename;
 	protected volatile JFrame frame;
+	protected volatile ScollProgressDialog progressDialog = null;
 	//protected final JMenuBar menubar;
 
 	public ScollPanel(String[] args) {
@@ -160,5 +161,13 @@ public class ScollPanel extends JPanel {
 		openFilename = true;
 		this.frame.setTitle(openedFilename);
 		//menuBar.getMenu(0).setEnabled(true);
+	}
+	public synchronized void makeProgressDialog(){
+		progressDialog = new ScollProgressDialog(frame);
+		progressDialog.pack();
+		progressDialog.setVisible(true);
+	}
+	public synchronized ScollProgressDialog getProgressDialog(){
+		return progressDialog;
 	}
 }

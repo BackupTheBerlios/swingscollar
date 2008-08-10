@@ -84,6 +84,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 	}	
 
 	public synchronized void doSolveOne(){
+	    tabPanel.getMainPanel().makeProgressDialog();
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
 		String input="sol1 0\n"+ tabPanel.textPane.getText(); // timeout = 0
 		ScollPort.getInstance().sendCmd(input);
@@ -91,7 +92,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 	}
 
 	public synchronized void doSolveAll(){
-//		showProgressDialog();
+	    tabPanel.getMainPanel().makeProgressDialog();
 		tabPanel.getMainPanel().getTabbedPane().removeAllDetails();
 		String input="sols 0\n"+ tabPanel.textPane.getText(); // timeout = 0
 		ScollPort.getInstance().sendCmd(input);

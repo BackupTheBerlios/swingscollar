@@ -2,7 +2,6 @@
 package eu.evoluware.swingscollar;
 
 import java.awt.BorderLayout;
-import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 
@@ -11,76 +10,61 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-/** 
- * MySwing: Advanced Swing Utilites 
- * Copyright (C) 2005  Santhosh Kumar T 
- * <p/> 
- * This library is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU Lesser General Public 
- * License as published by the Free Software Foundation; either 
- * version 2.1 of the License, or (at your option) any later version. 
- * <p/> 
- * This library is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
- * Lesser General Public License for more details. 
- */ 
 @SuppressWarnings("serial")
 public class ScollProgressDialog extends JDialog implements ChangeListener{ 
-    JLabel statusLabel = new JLabel(); 
-    JProgressBar progressBar = new JProgressBar(); 
-    ScollProgressMonitor monitor; 
- 
-    public ScollProgressDialog(Frame owner, ScollProgressMonitor monitor) throws HeadlessException{ 
-        super(owner, "Progress", true); 
-        init(monitor); 
-    } 
- 
-    public ScollProgressDialog(Dialog owner, ScollProgressMonitor monitor) throws HeadlessException{ 
-        super(owner); 
-        init(monitor); 
-    } 
- 
-    private void init(ScollProgressMonitor monitor){ 
-        this.monitor = monitor; 
- 
-        progressBar = new JProgressBar(0, monitor.getTotal()); 
-        if(monitor.isIndeterminate()) 
-            progressBar.setIndeterminate(true); 
-        else 
-            progressBar.setValue(monitor.getCurrent()); 
-        statusLabel.setText(monitor.getStatus()); 
- 
-        JPanel contents = (JPanel)getContentPane(); 
-        contents.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); 
-        contents.add(statusLabel, BorderLayout.NORTH); 
-        contents.add(progressBar); 
- 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE); 
-        monitor.addChangeListener(this); 
-    } 
- 
-    public void stateChanged(final ChangeEvent ce){ 
-        // to ensure EDT thread 
-        if(!SwingUtilities.isEventDispatchThread()){ 
-            SwingUtilities.invokeLater(new Runnable(){ 
-                public void run(){ 
-                    stateChanged(ce); 
-                } 
-            }); 
-            return; 
-        } 
- 
-        if(monitor.getCurrent()!=monitor.getTotal()){ 
-            statusLabel.setText(monitor.getStatus()); 
-            if(!monitor.isIndeterminate()) 
-                progressBar.setValue(monitor.getCurrent()); 
-        }else 
-            dispose(); 
-    }
+//	volatile int solutions = 0;
+	volatile JLabel statusLabel = new JLabel(); 
+	volatile JProgressBar progressBar = new JProgressBar(); 
+	volatile JLabel progressLabel = new JLabel(); 
+
+
+	public ScollProgressDialog(Frame owner) throws HeadlessException{ 
+		super(owner, "Scollar Calculation Progress", false); 
+		init();
+	} 
+
+	private synchronized void init(){
+		progressBar = new JProgressBar(0, 100); 
+		progressBar.setValue(0); 
+		statusLabel.setText("No solutions found yet"); 
+		progressLabel.setText("  /  "); 
+		JPanel contents = (JPanel)getContentPane(); 
+		contents.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15)); 
+		contents.add(statusLabel, BorderLayout.NORTH); 
+		contents.add(progressBar); 
+		contents.add(progressLabel, BorderLayout.WEST); 
+		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); 
+	} 
+
+
+//	public synchronized void addSolution(int i){ 
+//		solutions =+ i;
+//		statusLabel.setText(Integer.toString(solutions) + " solutions found."); 	
+//	}
+
+	public synchronized void parseUpdate(String str){
+		int splitpt = str.indexOf("/");
+		if (splitpt > 0) {
+			String p1 = str.substring(0,splitpt);
+			String p2 = str.substring(splitpt+1,str.length());
+			int i1 = Integer.parseInt(p1);
+			int i2 = Integer.parseInt(p2);
+			progressBar.setValue((i1 * 100) / i2);
+			progressLabel.setText(str);
+		}
+		else	{
+			statusLabel.setText(str);
+		}
+
+	}
+
+
+	public synchronized void stateChanged(ChangeEvent e) {
+		// TODO Auto-generated method stub
+
+	}
 
 } 

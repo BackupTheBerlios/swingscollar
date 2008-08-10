@@ -104,7 +104,7 @@ public class ScollReply {
 	}
 
 	public synchronized void render(){
-		ScollPanel mainPanel = getMainPanel();
+		final ScollPanel mainPanel = getMainPanel();
 		//mainPanel.getPatternPanel().statusLabel.setText("test");
 		switch (type) {
 		case CHECK:	
@@ -125,7 +125,8 @@ public class ScollReply {
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getDetailPanel(showNmbr));
 			break;		
 		case STATUS:
-			renderLabel(mainPanel.getPatternPanel());
+			renderProgress();
+			//renderLabel(mainPanel.getPatternPanel());
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());
 			//ScollPort.getInstance().sendCmd("status\n");
 			ScollPort.getInstance().getNextReply(); //status is never a final answer
@@ -161,6 +162,17 @@ public class ScollReply {
 		}
 		tabPanel.statusLabel.setText(content);				
 	}
+
+	private synchronized void renderProgress() {
+		final ScollProgressDialog dialog = getMainPanel().getProgressDialog();
+		if(!(dialog == null)) {
+			dialog.parseUpdate(result.getFirst());
+		}	
+		else {
+			renderLabel(getMainPanel().getPatternPanel());
+			};
+	}
+
 
 //	public void renderText(ScollTabPanel tabPanel){
 //	Iterator<String> it = result.iterator();
