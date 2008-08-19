@@ -3,6 +3,8 @@ package eu.evoluware.swingscollar;
 //import java.util.concurrent.LinkedBlockingQueue;
 //import java.util.concurrent.atomic.AtomicBoolean;
 
+import java.util.concurrent.*;
+
 import javax.swing.SwingUtilities;
 
 public class ScollPort { //singleton
@@ -14,7 +16,8 @@ public class ScollPort { //singleton
 	public static synchronized ScollPort getInstance(){
 		return ScollPort.instance;
 	}
-
+	
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 	private volatile ScollPanel panel;
 	private volatile ScollClient client;
 	private volatile ScollClient controlClient;
@@ -25,8 +28,8 @@ public class ScollPort { //singleton
 	}
 	
 	public synchronized void getNextReply(final ScollClient cl){  // use executor
-		final Thread T1 = new Thread(){
-			public void run() { // only once
+		executor.execute(new Runnable() { 
+			public void run(){	// only once
 				final ScollReply R = cl.getNextReply();
 				SwingUtilities.invokeLater(new Runnable(){
 					public void run(){
@@ -34,8 +37,7 @@ public class ScollPort { //singleton
 					}
 				});
 			}
-		};
-		T1.start();
+		});
 	}	
 	
 	public synchronized void getNextReply(){
