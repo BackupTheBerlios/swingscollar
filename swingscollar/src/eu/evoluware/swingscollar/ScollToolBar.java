@@ -26,7 +26,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 				,"fixpoints", "fixpts", "find fixpoints"
 				,"1 solution", "sol1", "find one solution"
 				,"solution", "sols", "find all solutions"
-				,"interrupt", "interrupt", "interrupt current calculation"
+//				,"interrupt", "interrupt", "interrupt current calculation"
 //				,"add panel", "addPanel", "add a panel"
 //				,"reset", "reset", "remove details"
 		};
@@ -53,7 +53,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 		else if	(a == "fixpts") { doFixpts();}
 		else if (a == "sol1") { doSolveOne();}
 		else if (a == "sols") { doSolveAll();}
-		else if (a == "interrupt") { doInterrupt();}
+		//else if (a == "interrupt") { doInterrupt();}
 		else {;};
 			//}
 			//else {doNothing();}

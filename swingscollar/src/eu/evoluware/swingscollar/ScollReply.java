@@ -95,10 +95,6 @@ public class ScollReply {
 		type = ERROR;
 	}
 
-//	private String getFirstLine(){
-//	return (result.size() == 0) ? "" : result.getFirst();
-//	}
-
 	private synchronized ScollPanel getMainPanel(){
 		return ScollPort.getInstance().getPanel();
 	}
@@ -117,6 +113,7 @@ public class ScollReply {
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getFixptPanel());
 			break;
 		case SOL:
+			mainPanel.endOfCalculation();
 			render(mainPanel.getSolutionsPanel(), true);
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getSolutionsPanel());
 			break;
@@ -126,9 +123,7 @@ public class ScollReply {
 			break;		
 		case STATUS:
 			renderProgress();
-			//renderLabel(mainPanel.getPatternPanel());
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getPatternPanel());
-			//ScollPort.getInstance().sendCmd("status\n");
 			ScollPort.getInstance().getNextReply(); //status is never a final answer
 			break;	
 		case ERROR:
@@ -173,25 +168,6 @@ public class ScollReply {
 			};
 	}
 
-
-//	public void renderText(ScollTabPanel tabPanel){
-//	Iterator<String> it = result.iterator();
-//	try {
-//	tabPanel.textPane.setText("");
-//	renderText(it, tabPanel, false);
-//	tabPanel.textPane.setCaretPosition(0);
-//	}	 
-//	catch (BadLocationException e) {
-//	// TODO Auto-generated catch block
-//	;
-//	}
-//	}	
-
-//	public void renderText(Iterator<String> it, ScollTabPanel tabPanel)
-//	throws BadLocationException{
-//	this.renderText(it, tabPanel, false);
-//	}
-
 	private synchronized void renderText(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons)
 	throws BadLocationException {
 		String str = "";
@@ -217,10 +193,6 @@ public class ScollReply {
 			}					
 		}
 	}
-
-//	private void renderTable(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
-//	this.renderTable(it, tabPanel, false);
-//	}
 
 	private synchronized void renderTable(Iterator<String> it, ScollTabPanel tabPanel, boolean addButtons) throws BadLocationException {
 		String str;

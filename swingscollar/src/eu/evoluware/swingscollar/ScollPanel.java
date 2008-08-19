@@ -170,4 +170,8 @@ public class ScollPanel extends JPanel {
 	public synchronized ScollProgressDialog getProgressDialog(){
 		return progressDialog;
 	}
+	public synchronized void endOfCalculation(){
+		progressDialog.interruptBtn.setEnabled(false);
+		progressDialog.progressBar.setEnabled(false);
+	}
 }

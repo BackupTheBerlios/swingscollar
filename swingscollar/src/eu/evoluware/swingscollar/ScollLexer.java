@@ -450,7 +450,8 @@ public class ScollLexer {
   /** 
    * zzAtBOL == true <=> the scanner is currently at the beginning of a line
    */
-  private boolean zzAtBOL = true;
+  @SuppressWarnings("unused")
+private boolean zzAtBOL = true;
 
   /** zzAtEOF == true <=> the scanner is at the EOF */
   private boolean zzAtEOF;
