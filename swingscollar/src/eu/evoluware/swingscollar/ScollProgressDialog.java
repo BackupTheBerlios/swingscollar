@@ -51,17 +51,16 @@ public class ScollProgressDialog extends JDialog implements ChangeListener, Acti
 	public synchronized void actionPerformed(final ActionEvent action) {
 		final String a = action.getActionCommand();
 		if (a == "interrupt") {
-			interruptBtn.setEnabled(false);
-			progressBar.setEnabled(false);
+			this.endOfCalculation();
 			ScollPort.getInstance().interrupt();
 		}
 		else {;};
-			//}
-			//else {doNothing();}
+		//}
+		//else {doNothing();}
 	}
 //	public synchronized void addSolution(int i){ 
-//		solutions =+ i;
-//		statusLabel.setText(Integer.toString(solutions) + " solutions found."); 	
+//	solutions =+ i;
+//	statusLabel.setText(Integer.toString(solutions) + " solutions found."); 	
 //	}
 
 	public synchronized void parseUpdate(String str){
@@ -85,6 +84,11 @@ public class ScollProgressDialog extends JDialog implements ChangeListener, Acti
 	public synchronized void stateChanged(ChangeEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public synchronized void endOfCalculation(){
+		interruptBtn.setEnabled(false);
+		progressBar.setEnabled(false);
 	}
 
 } 

@@ -21,7 +21,6 @@ public class ScollPanel extends JPanel {
 	protected boolean openFilename;
 	protected volatile JFrame frame;
 	protected volatile ScollProgressDialog progressDialog = null;
-	//protected final JMenuBar menubar;
 
 	public ScollPanel(String[] args) {
 		tabbedPane = new ScollTabbedPane(this);
@@ -171,7 +170,6 @@ public class ScollPanel extends JPanel {
 		return progressDialog;
 	}
 	public synchronized void endOfCalculation(){
-		progressDialog.interruptBtn.setEnabled(false);
-		progressDialog.progressBar.setEnabled(false);
+		progressDialog.endOfCalculation();
 	}
 }
