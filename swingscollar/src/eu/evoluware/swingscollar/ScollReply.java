@@ -113,6 +113,7 @@ public class ScollReply {
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getFixptPanel());
 			break;
 		case SOL:
+			mainPanel.getTabbedPane().setEnabledAt(ScollPanel.SOLUTIONINDEX, true);
 			mainPanel.endOfCalculation();
 			render(mainPanel.getSolutionsPanel(), true);
 			mainPanel.getTabbedPane().setSelectedComponent(mainPanel.getSolutionsPanel());
