@@ -144,6 +144,7 @@ public class ScollReply {
 			tabPanel.textPane.setCaretPosition(0);
 		}	 
 		catch (BadLocationException e) {
+			tabPanel.textPane.setText(e.toString());
 			// TODO Auto-generated catch block
 			;}
 	}	
@@ -176,22 +177,29 @@ public class ScollReply {
 		Boolean renderPlainText = true;
 		Boolean renderTable = false;
 		Boolean renderJpg = false;
+		Boolean renderGif = false;
+		if (! it.hasNext()) doc.insertString(doc.getLength(), "nothing here" + "\n", null);
 		while (it.hasNext()) {
 			renderTable = false;
 			renderJpg = false;
+			renderGif = false;
 			str = it.next();
 			renderTable = str.equals("<table>");
 			renderJpg = str.equals("<jpg>");
-			renderPlainText = !(renderTable || renderJpg);
+			renderGif = str.equals("<gif>");
+			renderPlainText = !(renderTable || renderJpg || renderGif);
 			if (renderPlainText) {
 				doc.insertString(doc.getLength(), str + "\n", null);
 			} 
 			else if (renderTable) {
 				renderTable(it, tabPanel, addButtons);
 			}
-			else if (renderJpg ){ 
+			else if (renderJpg){ 
 				renderJpg(it, tabPanel);
-			}					
+			}		
+			else if (renderGif){ 
+				renderGif(it, tabPanel);
+			}	
 		}
 	}
 
@@ -249,6 +257,28 @@ public class ScollReply {
 		try {
 			filename = it.next();
 			if (! it.next().equals("</jpg>")) throw (new Exception("Received invalid jpg filename format from Oz process"));
+		}	
+		catch(Exception E) {
+			error = true;
+			tabPanel.statusLabel.setText(E.getMessage());
+		}
+		if (! error){
+			//doc.insertString(doc.getLength(), "filename = "+filename+" \n", null);
+			ImageIcon graph = new ImageIcon(filename);
+			JLabel graphLbl = new JLabel(graph,JLabel.CENTER);
+			doc.insertString(doc.getLength(), "\n", null);
+			tabPanel.textPane.insertComponent(graphLbl); 
+			doc.insertString(doc.getLength(), "\n", null);
+		}
+	}
+	
+	private synchronized void renderGif(Iterator<String> it, ScollTabPanel tabPanel) throws BadLocationException {
+		String filename = null;
+		Boolean error= false;
+		Document doc = tabPanel.textPane.getDocument();
+		try {
+			filename = it.next();
+			if (! it.next().equals("</gif>")) throw (new Exception("Received invalid gif filename format from Oz process"));
 		}	
 		catch(Exception E) {
 			error = true;
