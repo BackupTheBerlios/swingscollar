@@ -25,7 +25,7 @@ public class ScollToolBar extends JToolBar implements ActionListener  {
 		final String[] ButtonStrings = {"check syntax", "check", "check scoll syntax"
 				,"fixpoints", "fixpts", "find fixpoints"
 				,"1 solution", "sol1", "find one solution"
-				,"solution", "sols", "find all solutions"
+				,"solutions", "sols", "find all solutions"
 //				,"interrupt", "interrupt", "interrupt current calculation"
 //				,"add panel", "addPanel", "add a panel"
 //				,"reset", "reset", "remove details"
