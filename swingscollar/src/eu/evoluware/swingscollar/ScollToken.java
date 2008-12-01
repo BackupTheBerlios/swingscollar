@@ -33,10 +33,10 @@ public class ScollToken {
 	public static final int BEHAVIOR_DECLARATIONS_STATE = ScollLexer.BEHDECL;
 	public static final int KNOWLEDGE_DECLARATIONS_STATE = ScollLexer.KDECL;
 	public static final int SYSTEM_STATE = ScollLexer.SYSTEM;
-	public static final int SYSTEM_VARS_STATE = ScollLexer.SYSTEM_VARS;
+	public static final int SYSTEM_VARS_STATE = ScollLexer.SYSTEM_VARS_AND_CONST;
 	public static final int BEHAVIOR_STATE = ScollLexer.BEHAVIOR;
 	public static final int BEHAVIOR_RULES_STATE = ScollLexer.BEHAVIOR_RULES;
-	public static final int BEHAVIOR_RULES_VARS_STATE = ScollLexer.BEHAVIOR_RULES_VARS;
+	public static final int BEHAVIOR_RULES_VARS_STATE = ScollLexer.BEH_RULES_VARS_AND_CONST;
 	public static final int SUBJECT_STATE = ScollLexer.SUBJECT;
 	public static final int CONFIG_STATE = ScollLexer.CONFIG;
 	public static final int GOAL_STATE = ScollLexer.GOAL;

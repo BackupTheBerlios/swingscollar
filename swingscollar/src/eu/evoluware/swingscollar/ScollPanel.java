@@ -76,6 +76,12 @@ public class ScollPanel extends JPanel {
 		//Add menus
 		sp.addMenusTo(frame);
 
+		
+		//add shutdownhook
+		Runtime.getRuntime().addShutdownHook( new Thread() {
+		    public void run() {ScollPort.getInstance().disconnect(); }
+		});
+		
 		//Display the window.
 		frame.pack();
 		frame.setVisible(true);

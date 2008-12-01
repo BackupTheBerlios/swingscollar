@@ -93,7 +93,18 @@ public class ScollClient {
 			mainOut.flush();
 			mainOut.print("interrupt\n");//mainOut.write(request);
 			mainOut.flush();
-			//ScollPort.getInstance().getNextReply(this);
+			mainIn.readLine();
+		}
+		catch (Exception e){
+			e.printStackTrace();	
+		}
+	}
+	
+	public synchronized void disconnect(){
+		try {
+			mainOut.flush();
+			mainOut.print("endOfProgram\n");
+			mainOut.flush();
 		}
 		catch (Exception e){
 			e.printStackTrace();	

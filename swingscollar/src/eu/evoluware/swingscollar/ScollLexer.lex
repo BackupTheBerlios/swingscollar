@@ -31,6 +31,12 @@
  * See COPYING.TXT for details.
  */
 
+/*
+* Changes:
+*
+* 31-Oct-2008 fred: allow constants in rules
+*/
+
 package eu.evoluware.swingscollar;
 
 import java.io.*;
@@ -190,10 +196,10 @@ import java.util.List;
 %state BEHDECL
 %state KDECL
 %state SYSTEM
-%state SYSTEM_VARS
+%state SYSTEM_VARS_AND_CONST
 %state BEHAVIOR
 %state BEHAVIOR_RULES
-%state BEHAVIOR_RULES_VARS
+%state BEH_RULES_VARS_AND_CONST
 %state SUBJECT
 %state CONFIG
 %state GOAL
@@ -575,7 +581,7 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 
 
 <SYSTEM> "(" { 
-    nextState = SYSTEM_VARS;
+    nextState = SYSTEM_VARS_AND_CONST;
     lastToken = ScollToken.SEPARATOR_LPAREN;
     String text = yytext();
     ScollContextToken t = (new ScollContextToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState, this));
@@ -647,7 +653,7 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 }
 
 
-<SYSTEM_VARS> ")" { 
+<SYSTEM_VARS_AND_CONST> ")" { 
     nextState = SYSTEM;
     lastToken = ScollToken.SEPARATOR_RPAREN;
     String text = yytext();
@@ -655,49 +661,49 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
     yybegin(nextState);
     return (t);
     }
-<SYSTEM_VARS> "_" { 
+<SYSTEM_VARS_AND_CONST> "_" { 
     lastToken = ScollToken.UNDERBAR_IDENTIFIER;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
     }
-<SYSTEM_VARS> "," {
+<SYSTEM_VARS_AND_CONST> "," {
     lastToken = ScollToken.SEPARATOR_COMMA;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<SYSTEM_VARS> {InitCapIdentifier} { 
+<SYSTEM_VARS_AND_CONST> {Identifier} { 
     lastToken = ScollToken.IDENTIFIER;
     String text = yytext();
     ScollContextToken t = (new ScollContextToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState, this));
     return (t);
 }
-<SYSTEM_VARS> ({WhiteSpace}+) { 
+<SYSTEM_VARS_AND_CONST> ({WhiteSpace}+) { 
     lastToken = ScollToken.WHITE_SPACE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<SYSTEM_VARS> {Comment} { 
+<SYSTEM_VARS_AND_CONST> {Comment} { 
     lastToken = ScollToken.COMMENT_END_OF_LINE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<SYSTEM_VARS> {TradComment} {
+<SYSTEM_VARS_AND_CONST> {TradComment} {
     lastToken = ScollToken.COMMENT_TRADITIONAL;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<SYSTEM_VARS> {ErrorInSystemVarsIdentifier} { 
+<SYSTEM_VARS_AND_CONST> {ErrorInSystemVarsIdentifier} { 
     lastToken = ScollToken.ERROR_IDENTIFIER;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<SYSTEM_VARS> {OpenComment} { 
+<SYSTEM_VARS_AND_CONST> {OpenComment} { 
     lastToken = ScollToken.ERROR_UNCLOSED_COMMENT;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
@@ -762,7 +768,7 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 
 
 <BEHAVIOR_RULES> "(" { 
-    nextState = BEHAVIOR_RULES_VARS;
+    nextState = BEH_RULES_VARS_AND_CONST;
     lastToken = ScollToken.SEPARATOR_LPAREN;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
@@ -834,7 +840,7 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
 
 
 
-<BEHAVIOR_RULES_VARS> ")" {
+<BEH_RULES_VARS_AND_CONST> ")" {
     nextState = BEHAVIOR_RULES;
     lastToken = ScollToken.SEPARATOR_RPAREN;
     String text = yytext();
@@ -842,49 +848,49 @@ DecimalNum=(([0]|{NonZeroDigit}{Digit}*))
     yybegin(nextState);
     return (t);
 }
-<BEHAVIOR_RULES_VARS> "_" { 
+<BEH_RULES_VARS_AND_CONST> "_" { 
     lastToken = ScollToken.UNDERBAR_IDENTIFIER;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
     }
-<BEHAVIOR_RULES_VARS> "," {
+<BEH_RULES_VARS_AND_CONST> "," {
     lastToken = ScollToken.SEPARATOR_COMMA;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> {InitCapIdentifier} { 
+<BEH_RULES_VARS_AND_CONST> {Identifier} { 
     lastToken = ScollToken.IDENTIFIER;
     String text = yytext();
     ScollContextToken t = (new ScollContextToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState, this));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> ({WhiteSpace}+) { 
+<BEH_RULES_VARS_AND_CONST> ({WhiteSpace}+) { 
     lastToken = ScollToken.WHITE_SPACE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> {Comment} { 
+<BEH_RULES_VARS_AND_CONST> {Comment} { 
     lastToken = ScollToken.COMMENT_END_OF_LINE;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> {TradComment} {
+<BEH_RULES_VARS_AND_CONST> {TradComment} {
     lastToken = ScollToken.COMMENT_TRADITIONAL;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> {ErrorInBehaviorVarsIdentifier} { 
+<BEH_RULES_VARS_AND_CONST> {ErrorInBehaviorVarsIdentifier} { 
     lastToken = ScollToken.ERROR_IDENTIFIER;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));
     return (t);
 }
-<BEHAVIOR_RULES_VARS> {OpenComment} { 
+<BEH_RULES_VARS_AND_CONST> {OpenComment} { 
     lastToken = ScollToken.ERROR_UNCLOSED_COMMENT;
     String text = yytext();
     ScollToken t = (new ScollToken(lastToken,text,yyline,yychar,yychar+text.length(),nextState));

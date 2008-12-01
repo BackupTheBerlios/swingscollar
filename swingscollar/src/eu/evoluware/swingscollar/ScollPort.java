@@ -55,6 +55,11 @@ public class ScollPort { //singleton
 		controlClient.sendInterrupt();
 	}
 	
+	public synchronized void disconnect(){	
+		controlClient.disconnect();
+		client.disconnect();
+	}
+	
 	public synchronized ScollPanel getPanel(){
 		return panel;
 	}
